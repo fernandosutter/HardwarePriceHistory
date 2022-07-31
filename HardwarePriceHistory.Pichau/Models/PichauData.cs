@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace HardwarePriceHistory.Pichau.Model;
+namespace HardwarePriceHistory.Pichau.Models;
 
 
     public class Aggregation
@@ -87,13 +87,13 @@ namespace HardwarePriceHistory.Pichau.Model;
     public class Data
     {
         [JsonProperty("category")]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
 
         [JsonProperty("products")]
-        public Products Products { get; set; }
+        public Products? Products { get; set; }
 
         [JsonProperty("banners")]
-        public List<object> Banners { get; set; }
+        public List<object>? Banners { get; set; }
     }
 
     public class Description
@@ -441,7 +441,7 @@ namespace HardwarePriceHistory.Pichau.Model;
         public string Typename { get; set; }
     }
 
-    public class Root
+    public class PichauProduct
     {
         [JsonProperty("data")]
         public Data Data { get; set; }
