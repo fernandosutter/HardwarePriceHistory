@@ -12,8 +12,8 @@ public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
         using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
         {
             connection.Open();
-            var sql = @"INSERT INTO ProductPriceHistory (product_id, price, datetime) VALUES (@ProductId, @Price, @Date)";
-            connection.Execute(sql, new { ProductId = priceHistory.ProductId, Price = priceHistory.Price, Datetime = priceHistory.Date });
+            string sql = @"INSERT INTO ProductPriceHistory (product_id, price, datetime) VALUES (@ProductId, @Price, @Date)";
+            connection.Execute(sql, new { ProductId = priceHistory.ProductId, Price = priceHistory.Price, Date = priceHistory.Date });
         }
         return true;
     }
@@ -23,7 +23,7 @@ public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
         using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
         {
             connection.Open();
-            var sql = @"DELETE FROM ProductPriceHistory WHERE id = @Id";
+            string sql = @"DELETE FROM ProductPriceHistory WHERE id = @Id";
             connection.Execute(sql, new { Id = id });
         }
         return true;
