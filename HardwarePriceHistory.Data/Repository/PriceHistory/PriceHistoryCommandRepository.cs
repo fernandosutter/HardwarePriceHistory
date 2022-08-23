@@ -9,7 +9,7 @@ public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
 {
     public bool AddPriceHistory(WebApi.Models.PriceHistory priceHistory)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             string sql = @"INSERT INTO ProductPriceHistory (product_id, price, datetime) VALUES (@ProductId, @Price, @Date)";
@@ -20,7 +20,7 @@ public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
 
     public bool DeletePriceHistory(int id)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             string sql = @"DELETE FROM ProductPriceHistory WHERE id = @Id";

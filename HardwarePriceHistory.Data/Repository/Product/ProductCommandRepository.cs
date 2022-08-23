@@ -13,7 +13,7 @@ public class ProductCommandRepository : IProductCommandRepository
     
     public void AddProductToDatabase(string barcode, string name)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"INSERT INTO Products (product_barcode, name) VALUES (@barcode, @name)";
@@ -23,7 +23,7 @@ public class ProductCommandRepository : IProductCommandRepository
 
     public bool RemoveProductFromDatabase(string barcode)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"DELETE FROM Products WHERE product_barcode = @barcode";
@@ -34,7 +34,7 @@ public class ProductCommandRepository : IProductCommandRepository
     
     public bool RemoveProductFromDatabase(int id)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"DELETE FROM Products WHERE id = @id";

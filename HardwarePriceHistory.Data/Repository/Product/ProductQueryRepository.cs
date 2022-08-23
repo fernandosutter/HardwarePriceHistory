@@ -13,7 +13,7 @@ public class ProductQueryRepository : IProductQueryRepository
     
     public bool ProductNameExists(string name)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"SELECT top 1 * FROM Products WHERE name like  '%' + @name + '%'";
@@ -24,7 +24,7 @@ public class ProductQueryRepository : IProductQueryRepository
 
     public bool ProductBarcodeExists(string barcode)
     {
-        using (var connection = new SqlConnection(DatabaseConection.ConnectionString))
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"SELECT top 1 * FROM Products WHERE product_barcode like  '%' + @barcode + '%'";
