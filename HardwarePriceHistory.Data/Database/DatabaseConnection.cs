@@ -1,8 +1,8 @@
 namespace HardwarePriceHistory.Data.Database;
 
-public static class DatabaseConection
+public static class DatabaseConnection
 {
-    private const string _connectionString = "Server=192.168.101.20,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
+    private const string _connectionString = "Server=192.168.101.15,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
     
     public static string ConnectionString
     {

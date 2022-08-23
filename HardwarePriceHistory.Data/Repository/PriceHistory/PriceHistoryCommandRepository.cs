@@ -7,13 +7,13 @@ namespace HardwarePriceHistory.Data.Repository.PriceHistory;
 
 public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
 {
-    public bool AddPriceHistory(WebApi.Models.PriceHistory priceHistory)
+    public bool AddPriceHistory(int productId, double productPrice, DateTime datetime)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             string sql = @"INSERT INTO ProductPriceHistory (product_id, price, datetime) VALUES (@ProductId, @Price, @Date)";
-            connection.Execute(sql, new { ProductId = priceHistory.ProductId, Price = priceHistory.Price, Date = priceHistory.Date });
+            connection.Execute(sql, new { ProductId = productId, Price = productPrice, Date = datetime });
         }
         return true;
     }

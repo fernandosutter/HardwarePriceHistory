@@ -4,7 +4,7 @@ namespace HardwarePriceHistory.Data.Interfaces;
 
 public interface IPriceHistoryCommandRepository
 {
-    bool AddPriceHistory(PriceHistory priceHistory);
+    bool AddPriceHistory(int productId, double productPrice, DateTime datetime);
     
     bool DeletePriceHistory(int id);
 }

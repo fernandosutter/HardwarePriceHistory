@@ -32,4 +32,15 @@ public class ProductQueryRepository : IProductQueryRepository
             return result.Any();
         }
     }
+
+    public int GetProductIdWithBarcode(string barcode)
+    {
+        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+        {
+            connection.Open();
+            var sql = @"SELECT top 1 id FROM Products WHERE product_barcode like  '%' + @barcode + '%'";
+            var result = connection.QueryFirst<int>(sql, new { barcode });
+            return result;
+        }
+    }
 }

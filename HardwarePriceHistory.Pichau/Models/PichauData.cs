@@ -315,7 +315,7 @@ namespace HardwarePriceHistory.Pichau.Models;
         public object Label { get; set; }
 
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         [JsonProperty("__typename")]
         public string Typename { get; set; }
@@ -441,7 +441,7 @@ namespace HardwarePriceHistory.Pichau.Models;
         public string Typename { get; set; }
     }
 
-    public class PichauProduct
+    public class PichauProductData
     {
         [JsonProperty("data")]
         public Data Data { get; set; }

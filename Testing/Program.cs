@@ -1,3 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using HardwarePriceHistory.Data.Repository.Product;
+using HardwarePriceHistory.Pichau.Models;
 
-Console.WriteLine("Hello, World!");
+ProductCommandRepository productCommandRepository = new ProductCommandRepository();
+ProductQueryRepository productQueryRepository = new ProductQueryRepository();
+PichauProduct pichauProduct = new PichauProduct("Oi", "123", 234.54);
+
+
+if (!productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode))
+{
+    var newProductId = productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name);
+    pichauProduct.Id = newProductId;
+}
+
+Console.WriteLine("Deu certo");

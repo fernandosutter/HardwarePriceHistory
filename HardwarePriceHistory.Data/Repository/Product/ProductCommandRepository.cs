@@ -11,13 +11,14 @@ public class ProductCommandRepository : IProductCommandRepository
     {
     }
     
-    public void AddProductToDatabase(string barcode, string name)
+    public int AddProductToDatabase(string barcode, string name)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
-            var sql = @"INSERT INTO Products (product_barcode, name) VALUES (@barcode, @name)";
-            connection.Execute(sql, new { barcode, name });
+            var sql = @"INSERT INTO Products (product_barcode, name) VALUES (@barcode, @name); SELECT SCOPE_IDENTITY()";
+            int returnedId = connection.ExecuteScalar<int>(sql, new { barcode, name });
+            return returnedId;
         }
     }
 

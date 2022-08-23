@@ -12,7 +12,7 @@ public class PichauRequest
         _Address = address;
     }
 
-    public PichauProduct MakeRequest()
+    public PichauProductData MakeRequest()
     {
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77");
@@ -21,8 +21,8 @@ public class PichauRequest
         using var reader = new StreamReader(response);
         string data = reader.ReadToEnd();
 
-        var product = JsonConvert.DeserializeObject<PichauProduct>(data);
+        var products = JsonConvert.DeserializeObject<PichauProductData>(data);
 
-        return product;
+        return products;
     }
 }
