@@ -1,6 +1,12 @@
+CREATE DATABASE HardwarePriceHistory;
+GO
+
+use HardwarePriceHistory;
+GO
+
 CREATE TABLE [ProductPriceHistory] (
   [id] int PRIMARY KEY IDENTITY(1, 1),
-  [product_id] nvarchar(255),
+  [product_id] int,
   [price] decimal,
   [datetime] datetime
 )
