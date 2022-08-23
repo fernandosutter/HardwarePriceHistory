@@ -1,5 +1,3 @@
-using HardwarePriceHistory.WebApi.Models;
-
 namespace HardwarePriceHistory.Data.Interfaces;
 
 public interface IPriceHistoryCommandRepository

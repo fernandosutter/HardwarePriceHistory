@@ -7,10 +7,6 @@ namespace HardwarePriceHistory.Data.Repository.Product;
 
 public class ProductQueryRepository : IProductQueryRepository
 {
-    public ProductQueryRepository()
-    {
-    }
-    
     public bool ProductNameExists(string name)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))

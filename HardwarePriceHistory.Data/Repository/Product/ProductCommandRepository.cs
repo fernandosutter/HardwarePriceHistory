@@ -7,10 +7,6 @@ namespace HardwarePriceHistory.Data.Repository.Product;
 
 public class ProductCommandRepository : IProductCommandRepository
 {
-    public ProductCommandRepository()
-    {
-    }
-    
     public int AddProductToDatabase(string barcode, string name)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))

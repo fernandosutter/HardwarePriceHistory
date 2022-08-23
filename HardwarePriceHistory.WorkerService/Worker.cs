@@ -1,3 +1,4 @@
+using System.Globalization;
 using HardwarePriceHistory.Data.Repository.PriceHistory;
 using HardwarePriceHistory.Data.Repository.Product;
 using HardwarePriceHistory.Pichau.Addresses;
@@ -71,7 +72,7 @@ public class Worker : BackgroundService
                         pichauProduct.Id = existingProductId;
                     }
                 
-                    _logger.LogInformation("Adicionando Histórico: R${0}, {1}",pichauProduct.Price.ToString(), pichauProduct.Name );
+                    _logger.LogInformation("Adicionando Histórico: R${0}, {1}",pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name );
                     priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id,pichauProduct.Price, DateTime.Now);
                 }
                 
