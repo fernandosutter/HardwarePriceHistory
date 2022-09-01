@@ -177,7 +177,7 @@ namespace HardwarePriceHistory.Pichau.Models;
         public string? SlotsMemoria { get; set; }
 
         [JsonProperty("marcas")]
-        public int Marcas { get; set; }
+        public int? Marcas { get; set; }
 
         [JsonProperty("marcas_info")]
         public MarcasInfo? MarcasInfo { get; set; }

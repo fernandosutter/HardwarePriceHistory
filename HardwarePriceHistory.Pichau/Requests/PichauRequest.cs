@@ -18,11 +18,18 @@ public class PichauRequest
         client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77");
         var response = client.GetStreamAsync(_address).Result;
 
-        using var reader = new StreamReader(response);
-        string data = reader.ReadToEnd();
+        try
+        {
+            using var reader = new StreamReader(response);
+            string data = reader.ReadToEnd();
 
-        var products = JsonConvert.DeserializeObject<PichauProductData>(data);
-
-        return products;
+            var products = JsonConvert.DeserializeObject<PichauProductData>(data);
+            return products;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        
     }
 }
