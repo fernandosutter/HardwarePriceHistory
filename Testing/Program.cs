@@ -1,15 +1,21 @@
 ﻿using HardwarePriceHistory.Data.Repository.Product;
 using HardwarePriceHistory.Pichau.Models;
-
-ProductCommandRepository productCommandRepository = new ProductCommandRepository();
-ProductQueryRepository productQueryRepository = new ProductQueryRepository();
-PichauProduct pichauProduct = new PichauProduct("Oi", "123", 234.54);
+using Spectre.Console;
 
 
-if (!productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode))
-{
-    var newProductId = productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name);
-    pichauProduct.Id = newProductId;
-}
+AnsiConsole.Status()
+    .Start("Thinking...", ctx =>
+    {
+        // Simulate some work
+        AnsiConsole.MarkupLine("Doing some work...");
+        Thread.Sleep(1000);
 
-Console.WriteLine("Deu certo");
+        // Update the status and spinner
+        ctx.Status("Thinking some more");
+        ctx.Spinner(Spinner.Known.Star);
+        ctx.SpinnerStyle(Style.Parse("green"));
+
+        // Simulate some work
+        AnsiConsole.MarkupLine("Doing some more work...");
+        Thread.Sleep(2000);
+    });

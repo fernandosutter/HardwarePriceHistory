@@ -1,4 +1,5 @@
 using System.Globalization;
+using HardwarePriceHistory.Data.Interfaces;
 using HardwarePriceHistory.Data.Repository.PriceHistory;
 using HardwarePriceHistory.Data.Repository.Product;
 using HardwarePriceHistory.Pichau.Addresses;
@@ -10,10 +11,19 @@ namespace HardwarePriceHistory.WorkerService;
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private readonly IProductCommandRepository _productCommandRepository;
+    private readonly IProductQueryRepository _productQueryRepository;
+    private readonly IPriceHistoryCommandRepository _priceHistoryCommandRepository;
 
-    public Worker(ILogger<Worker> logger)
+    public Worker(ILogger<Worker> logger,
+        IProductCommandRepository productCommandRepository,
+        IProductQueryRepository productQueryRepository,
+        IPriceHistoryCommandRepository priceHistoryCommandRepository)
     {
         _logger = logger;
+        _productCommandRepository = productCommandRepository;
+        _productQueryRepository = productQueryRepository;
+        _priceHistoryCommandRepository = priceHistoryCommandRepository;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,9 +40,9 @@ public class Worker : BackgroundService
             ProcessProductsPrices(PichauAddresses.PichauUrlMobo,2);
             _logger.LogInformation("Iniciando as Rams");
             ProcessProductsPrices(PichauAddresses.PichauUrlRam,3);
-            _logger.LogInformation("Iniciando as CPU AMD");
+            _logger.LogInformation("Iniciando as CPUs AMD");
             ProcessProductsPrices(PichauAddresses.PichauUrlProcessorAmd,4);
-            _logger.LogInformation("Iniciando as CPU Intel");
+            _logger.LogInformation("Iniciando as CPUs Intel");
             ProcessProductsPrices(PichauAddresses.PichauUrlProcessorIntel,5);
             
             _logger.LogInformation("Worker Stopped at: {time}", DateTimeOffset.Now);
@@ -45,37 +55,28 @@ public class Worker : BackgroundService
 
     private void ProcessProductsPrices(Func<int, string> urlFunction, int productType)
     {
-        #region Repositories
+        const int initialPage = 1;
 
-        ProductCommandRepository productCommandRepository = new ProductCommandRepository();
-        ProductQueryRepository productQueryRepository = new ProductQueryRepository();
-        PriceHistoryCommandRepository priceHistoryCommandRepository = new PriceHistoryCommandRepository();
-
-        #endregion
-
-        int initialPage = 1;
-        int finalPage;
-
-        PichauRequest pichauInitialRequest = new PichauRequest(urlFunction(initialPage));
+        var pichauInitialRequest = new PichauRequest(urlFunction(initialPage));
         var pichauInitialData = pichauInitialRequest.MakeRequest();
 
-        finalPage = pichauInitialData.Data.Products.PageInfo.TotalPages;
+        var finalPage = pichauInitialData.Data.Products.PageInfo.TotalPages;
 
-        for (int i = initialPage; i < finalPage; i++)
+        for (var i = initialPage; i < finalPage; i++)
         {
             _logger.LogInformation("Iniciando página: {0}", i.ToString());
-            PichauRequest pichauRequest = new PichauRequest(urlFunction(i));
+            var pichauRequest = new PichauRequest(urlFunction(i));
             var pichauData = pichauRequest.MakeRequest();
 
-            if (pichauData is null)
+            if (pichauData.Data is null)
             {
                 _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
                 continue;
             }
 
-                foreach (var product in pichauData.Data.Products.Items)
+            foreach (var product in pichauData.Data?.Products.Items)
             {
-                PichauProduct pichauProduct = new PichauProduct(product.Name, product.CodigoBarra,
+                var pichauProduct = new PichauProduct(product.Name, product.CodigoBarra,
                     product.PriceRange.MaximumPrice.FinalPrice.Value);
 
                 if (pichauProduct.Barcode is null)
@@ -90,24 +91,23 @@ public class Worker : BackgroundService
                     continue;
                 }
 
-                if (!productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode))
+                if (!_productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode))
                 {
                     _logger.LogInformation("Novo produto: {0}", pichauProduct.Name);
-                    var newProductId =
-                        productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name, productType);
+                    var newProductId = _productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name, productType);
                     pichauProduct.Id = newProductId;
                 }
                 else
                 {
                     _logger.LogInformation("Buscando ID produto com barcode: {0}, {1}", pichauProduct.Barcode,
                         pichauProduct.Name);
-                    var existingProductId = productQueryRepository.GetProductIdWithBarcode(pichauProduct.Barcode);
+                    var existingProductId = _productQueryRepository.GetProductIdWithBarcode(pichauProduct.Barcode);
                     pichauProduct.Id = existingProductId;
                 }
 
                 _logger.LogInformation("Adicionando Histórico: R${0}, {1}",
                     pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
-                priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
+                _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
             }
         }
     }

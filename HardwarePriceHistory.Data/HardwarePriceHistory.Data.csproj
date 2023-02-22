@@ -16,8 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\HardwarePriceHistory.Models\HardwarePriceHistory.Models.csproj" />
       <ProjectReference Include="..\HardwarePriceHistory.Pichau\HardwarePriceHistory.Pichau.csproj" />
-      <ProjectReference Include="..\HardwarePriceHistory.WebApi\HardwarePriceHistory.WebApi.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-using HardwarePriceHistory.WebApi.Models;
+using HardwarePriceHistory.Models;
 
 namespace HardwarePriceHistory.Data.Interfaces;
 

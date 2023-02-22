@@ -1,14 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.WebApi", "HardwarePriceHistory.WebApi\HardwarePriceHistory.WebApi.csproj", "{2048B147-3B70-491F-9DC4-80D34AE7F2B2}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwarePriceHistory.Pichau", "HardwarePriceHistory.Pichau\HardwarePriceHistory.Pichau.csproj", "{8090037C-EB98-4FDC-A967-3AAFA6A1C39B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.Pichau", "HardwarePriceHistory.Pichau\HardwarePriceHistory.Pichau.csproj", "{8090037C-EB98-4FDC-A967-3AAFA6A1C39B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwarePriceHistory.Data", "HardwarePriceHistory.Data\HardwarePriceHistory.Data.csproj", "{A34CF399-DEA4-4547-8904-4107CB586989}"
+	ProjectSection(ProjectDependencies) = postProject
+		{77AD3814-76E5-409A-A643-533B782D674B} = {77AD3814-76E5-409A-A643-533B782D674B}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.Data", "HardwarePriceHistory.Data\HardwarePriceHistory.Data.csproj", "{A34CF399-DEA4-4547-8904-4107CB586989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.csproj", "{0C239DF8-4596-482D-A7D4-E802AA12C889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{0C239DF8-4596-482D-A7D4-E802AA12C889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwarePriceHistory.WorkerService", "HardwarePriceHistory.WorkerService\HardwarePriceHistory.WorkerService.csproj", "{E8E26220-C57F-4B60-8E53-76DA8B942472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.WorkerService", "HardwarePriceHistory.WorkerService\HardwarePriceHistory.WorkerService.csproj", "{E8E26220-C57F-4B60-8E53-76DA8B942472}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.Models", "HardwarePriceHistory.Models\HardwarePriceHistory.Models.csproj", "{77AD3814-76E5-409A-A643-533B782D674B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,10 +22,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2048B147-3B70-491F-9DC4-80D34AE7F2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2048B147-3B70-491F-9DC4-80D34AE7F2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2048B147-3B70-491F-9DC4-80D34AE7F2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2048B147-3B70-491F-9DC4-80D34AE7F2B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8090037C-EB98-4FDC-A967-3AAFA6A1C39B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8090037C-EB98-4FDC-A967-3AAFA6A1C39B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8090037C-EB98-4FDC-A967-3AAFA6A1C39B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,5 +38,15 @@ Global
 		{E8E26220-C57F-4B60-8E53-76DA8B942472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8E26220-C57F-4B60-8E53-76DA8B942472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8E26220-C57F-4B60-8E53-76DA8B942472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77AD3814-76E5-409A-A643-533B782D674B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77AD3814-76E5-409A-A643-533B782D674B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77AD3814-76E5-409A-A643-533B782D674B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77AD3814-76E5-409A-A643-533B782D674B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5F337C2A-7358-4C43-A909-57FD5CF1EF83}
 	EndGlobalSection
 EndGlobal
