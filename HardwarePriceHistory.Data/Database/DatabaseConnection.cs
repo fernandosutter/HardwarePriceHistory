@@ -9,6 +9,8 @@ public static class DatabaseConnection
         {
             #if DEBUG
             return "Server=192.168.101.11,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
+            #else
+            return "";
             #endif
         }
     }

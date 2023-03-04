@@ -10,6 +10,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IProductCommandRepository, ProductCommandRepository>();
         services.AddSingleton<IProductQueryRepository, ProductQueryRepository>();
         services.AddSingleton<IPriceHistoryCommandRepository, PriceHistoryCommandRepository>();
+        services.AddSingleton<IPriceHistoryQueryRepository, PriceHistoryQueryRepository>();
     })
     .Build();
 

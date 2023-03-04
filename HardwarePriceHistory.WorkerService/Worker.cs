@@ -14,16 +14,20 @@ public class Worker : BackgroundService
     private readonly IProductCommandRepository _productCommandRepository;
     private readonly IProductQueryRepository _productQueryRepository;
     private readonly IPriceHistoryCommandRepository _priceHistoryCommandRepository;
+    private readonly IPriceHistoryQueryRepository _priceHistoryQueryRepository;
 
     public Worker(ILogger<Worker> logger,
         IProductCommandRepository productCommandRepository,
         IProductQueryRepository productQueryRepository,
-        IPriceHistoryCommandRepository priceHistoryCommandRepository)
+        IPriceHistoryCommandRepository priceHistoryCommandRepository,
+        IPriceHistoryQueryRepository priceHistoryQueryRepository
+        )
     {
         _logger = logger;
         _productCommandRepository = productCommandRepository;
         _productQueryRepository = productQueryRepository;
         _priceHistoryCommandRepository = priceHistoryCommandRepository;
+        _priceHistoryQueryRepository = priceHistoryQueryRepository;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -105,9 +109,21 @@ public class Worker : BackgroundService
                     pichauProduct.Id = existingProductId;
                 }
 
+                if (_priceHistoryQueryRepository.CheckIfLastPriceAlreadyExistsToDate(pichauProduct.Id,
+                        pichauProduct.Price, DateTime.Now))
+                {
+                    _logger.LogInformation("Já existe preço cadastrado para {0}, para o produto {1} com preço de R${2}", 
+                        DateTime.Today.ToString("dd/MM/yyyy"),
+                        pichauProduct.Name,
+                        pichauProduct.Price
+                        );
+                    continue;
+                }
+
                 _logger.LogInformation("Adicionando Histórico: R${0}, {1}",
-                    pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
+                pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
                 _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
+
             }
         }
     }
