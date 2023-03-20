@@ -17,24 +17,24 @@ public class ProductQueryRepository : IProductQueryRepository
         }
     }
 
-    public bool ProductBarcodeExists(string barcode)
+    public async Task<bool> ProductBarcodeExists(string barcode)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"SELECT top 1 * FROM Products WHERE product_barcode like  '%' + @barcode + '%'";
-            var result = connection.Query<Product>(sql, new { barcode });
+            var result = await connection.QueryAsync<Product>(sql, new { barcode });
             return result.Any();
         }
     }
 
-    public int GetProductIdWithBarcode(string barcode)
+    public async Task<int> GetProductIdWithBarcode(string barcode)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"SELECT top 1 id FROM Products WHERE product_barcode like  '%' + @barcode + '%'";
-            var result = connection.QueryFirst<int>(sql, new { barcode });
+            var result = await connection.QueryFirstAsync<int>(sql, new { barcode });
             return result;
         }
     }

@@ -39,15 +39,15 @@ public class Worker : BackgroundService
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
             _logger.LogInformation("Iniciando as GPUS");
-            ProcessProductsPrices(PichauAddresses.PichauUrlGpu,1);
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlGpu,1);
             _logger.LogInformation("Iniciando as Mobos");
-            ProcessProductsPrices(PichauAddresses.PichauUrlMobo,2);
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlMobo,2);
             _logger.LogInformation("Iniciando as Rams");
-            ProcessProductsPrices(PichauAddresses.PichauUrlRam,3);
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlRam, 3);
             _logger.LogInformation("Iniciando as CPUs AMD");
-            ProcessProductsPrices(PichauAddresses.PichauUrlProcessorAmd,4);
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorAmd, 4);
             _logger.LogInformation("Iniciando as CPUs Intel");
-            ProcessProductsPrices(PichauAddresses.PichauUrlProcessorIntel,5);
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorIntel, 5);
             
             _logger.LogInformation("Worker Stopped at: {time}", DateTimeOffset.Now);
             _logger.LogInformation("Time Processing: {time}", DateTimeOffset.Now - startTime);
@@ -57,7 +57,7 @@ public class Worker : BackgroundService
         }
     }
 
-    private void ProcessProductsPrices(Func<int, string> urlFunction, int productType)
+    private async Task ProcessProductsPricesAsync(Func<int, string> urlFunction, int productType)
     {
         const int initialPage = 1;
 
@@ -95,22 +95,27 @@ public class Worker : BackgroundService
                     continue;
                 }
 
-                if (!_productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode))
+                var productBarcodeExists = await _productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode);
+
+                if (!productBarcodeExists)
                 {
                     _logger.LogInformation("Novo produto: {0}", pichauProduct.Name);
-                    var newProductId = _productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name, productType);
+                    var newProductId = await _productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name, productType);
                     pichauProduct.Id = newProductId;
                 }
                 else
                 {
                     _logger.LogInformation("Buscando ID produto com barcode: {0}, {1}", pichauProduct.Barcode,
                         pichauProduct.Name);
-                    var existingProductId = _productQueryRepository.GetProductIdWithBarcode(pichauProduct.Barcode);
+                    var existingProductId = await _productQueryRepository.GetProductIdWithBarcode(pichauProduct.Barcode);
                     pichauProduct.Id = existingProductId;
                 }
 
-                if (_priceHistoryQueryRepository.CheckIfLastPriceAlreadyExistsToDate(pichauProduct.Id,
-                        pichauProduct.Price, DateTime.Now))
+                var lastPriceAlreadyExists = await _priceHistoryQueryRepository.CheckIfLastPriceAlreadyExistsToDate(
+                    pichauProduct.Id,
+                    pichauProduct.Price, DateTime.Now);
+
+                if (lastPriceAlreadyExists)
                 {
                     _logger.LogInformation("Já existe preço cadastrado para {0}, para o produto {1} com preço de R${2}", 
                         DateTime.Today.ToString("dd/MM/yyyy"),
@@ -122,8 +127,7 @@ public class Worker : BackgroundService
 
                 _logger.LogInformation("Adicionando Histórico: R${0}, {1}",
                 pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
-                _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
-
+                await _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
             }
         }
     }

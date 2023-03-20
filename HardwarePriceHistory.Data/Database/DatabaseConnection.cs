@@ -7,11 +7,11 @@ public static class DatabaseConnection
         //Tratar variavel de ambiente para substituir o valor da string de conexão
         get
         {
-            #if DEBUG
-            return "Server=192.168.101.11,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
-            #else
-            return "";
-            #endif
+#if DEBUG
+            return "Server=192.168.101.12,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
+#else
+            return "Server=192.168.101.12,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
+#endif
         }
     }
 }

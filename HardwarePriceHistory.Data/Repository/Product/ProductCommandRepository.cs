@@ -7,13 +7,13 @@ namespace HardwarePriceHistory.Data.Repository.Product;
 
 public class ProductCommandRepository : IProductCommandRepository
 {
-    public int AddProductToDatabase(string barcode, string name, int productType)
+    public async Task<int> AddProductToDatabase(string barcode, string name, int productType)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"INSERT INTO Products (product_barcode, name, product_type) VALUES (@barcode, @name, @productType); SELECT SCOPE_IDENTITY()";
-            int returnedId = connection.ExecuteScalar<int>(sql, new { barcode, name, productType });
+            int returnedId = await connection.ExecuteScalarAsync<int>(sql, new { barcode, name, productType });
             return returnedId;
         }
     }

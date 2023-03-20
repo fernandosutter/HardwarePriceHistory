@@ -28,7 +28,7 @@ public class PichauRequest
         }
         catch (Exception e)
         {
-            return null;
+            throw e;
         }
         
     }

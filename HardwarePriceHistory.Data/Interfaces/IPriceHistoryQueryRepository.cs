@@ -4,11 +4,7 @@ namespace HardwarePriceHistory.Data.Interfaces;
 
 public interface IPriceHistoryQueryRepository
 {
-    PriceHistory GetPriceHistory(int id);
-    
-    IEnumerable<PriceHistory> GetPriceHistory();
+    List<PriceHistory> GetPriceHistory(int productId, DateTime? initialDate, DateTime? finalDate);
 
-    IEnumerable<PriceHistory> GetPriceHistory(string barcode);
-
-    bool CheckIfLastPriceAlreadyExistsToDate(int productId, double price, DateTime dateTime);
+    Task<bool> CheckIfLastPriceAlreadyExistsToDate(int productId, double price, DateTime dateTime);
 }
