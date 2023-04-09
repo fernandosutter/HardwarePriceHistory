@@ -2,8 +2,6 @@
 using Dapper;
 using HardwarePriceHistory.Data.Database;
 using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Models;
-using HardwarePriceHistory.Pichau.Models;
 using Microsoft.Data.SqlClient;
 
 namespace HardwarePriceHistory.Data.Repository.PriceHistory
@@ -48,6 +46,7 @@ namespace HardwarePriceHistory.Data.Repository.PriceHistory
             {
                 connection.Open();
 
+                #region SQL
                 var sql = @"SELECT top 1 NULL
                             FROM ProductPriceHistory
                             WHERE product_id = @ProductID
@@ -60,10 +59,9 @@ namespace HardwarePriceHistory.Data.Repository.PriceHistory
                               AND CAST(datetime AS Date) = @DateTime
                               AND price = @Price
                             ORDER BY id DESC";
-                
-                
+                #endregion
+
                 var result = await connection.QueryAsync(sql, new {ProductID = productId, Price = price, DateTime = dateTime.Date });
-                
                 
                 return result.Any();
             }

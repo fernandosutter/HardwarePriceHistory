@@ -19,11 +19,14 @@ namespace HardwarePriceHistory.WebAPI.Controllers
 
 
         [HttpGet]
-        public List<PriceHistory> GetPriceHistory(int productId, DateTime? initialDate, DateTime? finalDate)
+        public ActionResult<List<PriceHistory>> GetPriceHistory(int productId, DateTime? initialDate, DateTime? finalDate)
         {
             var prices = _priceHistoryService.GetPrices(productId, initialDate, finalDate);
 
-            return prices;
+            if(prices.Count == 0)
+                return NotFound();
+
+            return Ok(prices);
         }
 
     }

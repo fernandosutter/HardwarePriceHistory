@@ -95,7 +95,7 @@ public class Worker : BackgroundService
                     continue;
                 }
 
-                var productBarcodeExists = await _productQueryRepository.ProductBarcodeExists(pichauProduct.Barcode);
+                var productBarcodeExists = await _productQueryRepository.ProductExistsByNameAndBarcode(pichauProduct.Barcode, pichauProduct.Name);
 
                 if (!productBarcodeExists)
                 {
@@ -107,7 +107,7 @@ public class Worker : BackgroundService
                 {
                     _logger.LogInformation("Buscando ID produto com barcode: {0}, {1}", pichauProduct.Barcode,
                         pichauProduct.Name);
-                    var existingProductId = await _productQueryRepository.GetProductIdWithBarcode(pichauProduct.Barcode);
+                    var existingProductId = await _productQueryRepository.GetProductIdWithBarcodeAndName(pichauProduct.Barcode, pichauProduct.Name);
                     pichauProduct.Id = existingProductId;
                 }
 

@@ -13,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 //DI
 builder.Services.AddSingleton<IPriceHistoryQueryRepository, PriceHistoryQueryRepository>();
+builder.Services.AddSingleton<IProductQueryRepository, ProductQueryRepository>();
+builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<PriceHistoryService>();
 
 var app = builder.Build();
