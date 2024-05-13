@@ -8,9 +8,9 @@ public static class DatabaseConnection
         get
         {
 #if DEBUG
-            return "Server=192.168.101.12,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
+            return "Server=localhost,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
 #else
-            return "Server=192.168.101.12,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
+            return "Server=localhost,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
 #endif
         }
     }

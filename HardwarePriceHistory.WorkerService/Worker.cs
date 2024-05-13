@@ -1,7 +1,6 @@
 using System.Globalization;
 using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Data.Repository.PriceHistory;
-using HardwarePriceHistory.Data.Repository.Product;
+using System.Threading.Tasks;
 using HardwarePriceHistory.Pichau.Addresses;
 using HardwarePriceHistory.Pichau.Models;
 using HardwarePriceHistory.Pichau.Requests;
@@ -39,16 +38,18 @@ public class Worker : BackgroundService
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
             _logger.LogInformation("Iniciando as GPUS");
-            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlGpu,1);
+            var taskGpu = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlGpu,1));
             _logger.LogInformation("Iniciando as Mobos");
-            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlMobo,2);
+            var taskMobo = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlMobo,2));
             _logger.LogInformation("Iniciando as Rams");
-            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlRam, 3);
+            var taskRam = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlRam, 3));
             _logger.LogInformation("Iniciando as CPUs AMD");
-            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorAmd, 4);
+            var taskCpuAmd = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorAmd, 4));
             _logger.LogInformation("Iniciando as CPUs Intel");
-            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorIntel, 5);
-            
+            var taskCpuIntel = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorIntel, 5));
+
+            Task.WaitAll(taskGpu, taskMobo, taskRam, taskCpuAmd, taskCpuIntel);
+
             _logger.LogInformation("Worker Stopped at: {time}", DateTimeOffset.Now);
             _logger.LogInformation("Time Processing: {time}", DateTimeOffset.Now - startTime);
 
@@ -57,7 +58,7 @@ public class Worker : BackgroundService
         }
     }
 
-    private async Task ProcessProductsPricesAsync(Func<int, string> urlFunction, int productType)
+    private void ProcessProductsPricesAsync(Func<int, string> urlFunction, int productType)
     {
         const int initialPage = 1;
 
@@ -66,16 +67,20 @@ public class Worker : BackgroundService
 
         var finalPage = pichauInitialData.Data.Products.PageInfo.TotalPages;
 
-        for (var i = initialPage; i < finalPage; i++)
+        Parallel.For(1, finalPage, async i =>
         {
             _logger.LogInformation("Iniciando página: {0}", i.ToString());
             var pichauRequest = new PichauRequest(urlFunction(i));
             var pichauData = pichauRequest.MakeRequest();
 
+            if (pichauData is null)
+            {
+                _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
+            }
+
             if (pichauData.Data is null)
             {
                 _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
-                continue;
             }
 
             foreach (var product in pichauData.Data?.Products.Items)
@@ -117,7 +122,7 @@ public class Worker : BackgroundService
 
                 if (lastPriceAlreadyExists)
                 {
-                    _logger.LogInformation("Já existe preço cadastrado para {0}, para o produto {1} com preço de R${2}", 
+                    _logger.LogInformation("Já existe preço cadastrado para {0}, para o produto {1} com preço de R${2}",
                         DateTime.Today.ToString("dd/MM/yyyy"),
                         pichauProduct.Name,
                         pichauProduct.Price
@@ -129,6 +134,6 @@ public class Worker : BackgroundService
                 pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
                 await _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
             }
-        }
+        });
     }
 }
