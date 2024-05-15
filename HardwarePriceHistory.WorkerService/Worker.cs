@@ -34,21 +34,19 @@ public class Worker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var startTime = DateTimeOffset.Now;
-            
+
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
             _logger.LogInformation("Iniciando as GPUS");
-            var taskGpu = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlGpu,1));
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlGpu, 1);
             _logger.LogInformation("Iniciando as Mobos");
-            var taskMobo = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlMobo,2));
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlMobo,2);
             _logger.LogInformation("Iniciando as Rams");
-            var taskRam = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlRam, 3));
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlRam, 3);
             _logger.LogInformation("Iniciando as CPUs AMD");
-            var taskCpuAmd = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorAmd, 4));
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorAmd, 4);
             _logger.LogInformation("Iniciando as CPUs Intel");
-            var taskCpuIntel = Task.Run(() => ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorIntel, 5));
-
-            Task.WaitAll(taskGpu, taskMobo, taskRam, taskCpuAmd, taskCpuIntel);
+            await ProcessProductsPricesAsync(PichauAddresses.PichauUrlProcessorIntel, 5);
 
             _logger.LogInformation("Worker Stopped at: {time}", DateTimeOffset.Now);
             _logger.LogInformation("Time Processing: {time}", DateTimeOffset.Now - startTime);
@@ -58,82 +56,111 @@ public class Worker : BackgroundService
         }
     }
 
-    private void ProcessProductsPricesAsync(Func<int, string> urlFunction, int productType)
+    private async Task ProcessProductsPricesAsync(Func<int, string> urlFunction, int productType)
     {
         const int initialPage = 1;
 
         var pichauInitialRequest = new PichauRequest(urlFunction(initialPage));
         var pichauInitialData = pichauInitialRequest.MakeRequest();
 
+        if (pichauInitialData is null)
+        {
+            _logger.LogWarning("Não foi possível iniciar as requisições");
+            return;
+        }
+
         var finalPage = pichauInitialData.Data.Products.PageInfo.TotalPages;
 
-        Parallel.For(1, finalPage, async i =>
+        var tasks = new List<Task>();
+
+        for (int i = 1; i <= finalPage; i++)
         {
-            _logger.LogInformation("Iniciando página: {0}", i.ToString());
-            var pichauRequest = new PichauRequest(urlFunction(i));
-            var pichauData = pichauRequest.MakeRequest();
-
-            if (pichauData is null)
+            int page = i;
+            tasks.Add(Task.Run(async () =>
             {
-                _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
-            }
+                try {
+                    _logger.LogInformation("Iniciando página: {0}", page.ToString());
+                    var pichauRequest = new PichauRequest(urlFunction(page));
+                    var pichauData = pichauRequest.MakeRequest();
 
-            if (pichauData.Data is null)
-            {
-                _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
-            }
+                    if (pichauData is null)
+                    {
+                        _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
+                    }
 
-            foreach (var product in pichauData.Data?.Products.Items)
-            {
-                var pichauProduct = new PichauProduct(product.Name, product.CodigoBarra,
-                    product.PriceRange.MaximumPrice.FinalPrice.Value);
+                    if (pichauData.Data is null)
+                    {
+                        _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
+                    }
 
-                if (pichauProduct.Barcode is null)
-                {
-                    _logger.LogInformation("Produto com barcode nulo: {0}", pichauProduct.Name);
-                    continue;
+                    foreach (var product in pichauData.Data?.Products.Items)
+                    {
+                        var pichauProduct = new PichauProduct(product.Name, product.CodigoBarra,
+                            product.PriceRange.MaximumPrice.FinalPrice.Value);
+
+                        if (pichauProduct.Barcode is null)
+                        {
+                            _logger.LogInformation("Produto com barcode nulo: {0}", pichauProduct.Name);
+                            continue;
+                        }
+
+                        if (pichauProduct.Price == 0)
+                        {
+                            _logger.LogInformation("Produto com preço zero: {0}", pichauProduct.Name);
+                            continue;
+                        }
+
+                        var productBarcodeExists = await _productQueryRepository.ProductExistsByNameAndBarcode(pichauProduct.Barcode, pichauProduct.Name);
+
+                        if (!productBarcodeExists)
+                        {
+                            _logger.LogInformation("Novo produto: {0}", pichauProduct.Name);
+                            var newProductId = await _productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name, productType);
+                            pichauProduct.Id = newProductId;
+                        }
+                        else
+                        {
+                            _logger.LogInformation("Buscando ID produto com barcode: {0}, {1}", pichauProduct.Barcode,
+                                pichauProduct.Name);
+                            var existingProductId = await _productQueryRepository.GetProductIdWithBarcodeAndName(pichauProduct.Barcode, pichauProduct.Name);
+                            pichauProduct.Id = existingProductId;
+                        }
+
+                        var lastPriceAlreadyExists = await _priceHistoryQueryRepository.CheckIfLastPriceAlreadyExistsToDate(
+                            pichauProduct.Id,
+                            pichauProduct.Price, DateTime.Now);
+
+                        if (lastPriceAlreadyExists)
+                        {
+                            _logger.LogInformation("Já existe preço cadastrado para {0}, para o produto {1} com preço de R${2}",
+                                DateTime.Today.ToString("dd/MM/yyyy"),
+                                pichauProduct.Name,
+                                pichauProduct.Price
+                                );
+                            continue;
+                        }
+
+                        _logger.LogInformation("Adicionando Histórico: R${0}, {1}",
+                        pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
+                        await _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
+                    }
                 }
-
-                if (pichauProduct.Price == 0)
+                catch (Exception ex)
                 {
-                    _logger.LogInformation("Produto com preço zero: {0}", pichauProduct.Name);
-                    continue;
+                    _logger.LogError(ex, "Ocorreu um erro ao processar a página {0}", page);
                 }
+                
+            }));
 
-                var productBarcodeExists = await _productQueryRepository.ProductExistsByNameAndBarcode(pichauProduct.Barcode, pichauProduct.Name);
-
-                if (!productBarcodeExists)
-                {
-                    _logger.LogInformation("Novo produto: {0}", pichauProduct.Name);
-                    var newProductId = await _productCommandRepository.AddProductToDatabase(pichauProduct.Barcode, pichauProduct.Name, productType);
-                    pichauProduct.Id = newProductId;
-                }
-                else
-                {
-                    _logger.LogInformation("Buscando ID produto com barcode: {0}, {1}", pichauProduct.Barcode,
-                        pichauProduct.Name);
-                    var existingProductId = await _productQueryRepository.GetProductIdWithBarcodeAndName(pichauProduct.Barcode, pichauProduct.Name);
-                    pichauProduct.Id = existingProductId;
-                }
-
-                var lastPriceAlreadyExists = await _priceHistoryQueryRepository.CheckIfLastPriceAlreadyExistsToDate(
-                    pichauProduct.Id,
-                    pichauProduct.Price, DateTime.Now);
-
-                if (lastPriceAlreadyExists)
-                {
-                    _logger.LogInformation("Já existe preço cadastrado para {0}, para o produto {1} com preço de R${2}",
-                        DateTime.Today.ToString("dd/MM/yyyy"),
-                        pichauProduct.Name,
-                        pichauProduct.Price
-                        );
-                    continue;
-                }
-
-                _logger.LogInformation("Adicionando Histórico: R${0}, {1}",
-                pichauProduct.Price.ToString(CultureInfo.CurrentCulture), pichauProduct.Name);
-                await _priceHistoryCommandRepository.AddPriceHistory(pichauProduct.Id, pichauProduct.Price, DateTime.Now);
-            }
-        });
+        }
+        
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Ocorreu um erro enquanto esperava que todas as tarefas fossem concluídas");
+        }
     }
 }
