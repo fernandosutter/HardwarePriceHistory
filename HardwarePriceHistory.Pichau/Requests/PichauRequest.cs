@@ -23,6 +23,9 @@ public class PichauRequest
         client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
         client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "none");
         client.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
+        client.DefaultRequestHeaders.Add("Referer", "https://www.pichau.com.br/hardware/placa-m-e");
+        client.DefaultRequestHeaders.Add("Cookie",
+            "cf_clearance=yZe3yO4CMQKFt3HbabYwHON9SjsizKbol6.92ng6J_k-1717621497-1.0.1.1-k8weYI8NUAk1LyGE_wCZWhap2SFGssP7yZPPWdOIWyu5mMwVlr6_YfsHFoQX05q_sevzz5izjGCfr5.pF8FUIQ; __cf_bm=7VB9Tzt_HSwXt_Q6c4w4N01VNlT63E9HsRdrXffnb78-1717622530-1.0.1.1-N2cN3KtpIMuHJCJJXqOqUPUZn7_wtCZzPMxBl0hLrEciNlGS1bGrFtZbt9paSWizVT2Jy3ve0JBClNs.qlaNVg");
 
         try
         {

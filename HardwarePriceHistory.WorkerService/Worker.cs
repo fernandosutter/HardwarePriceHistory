@@ -76,27 +76,30 @@ public class Worker : BackgroundService
         for (int i = 1; i <= finalPage; i++)
         {
             int page = i;
+            _logger.LogInformation("Iniciando página: {0}", page.ToString());
+            var pichauRequest = new PichauRequest(urlFunction(page));
+            var pichauData = pichauRequest.MakeRequest();
+
+            if (pichauData is null)
+            {
+                _logger.LogInformation("Falha na requisição da página {0}", page.ToString());
+                continue;
+            }
+
+            if (pichauData.Data is null)
+            {
+                _logger.LogInformation("Falha na requisição da página {0}", page.ToString());
+                continue;
+            }
+
             tasks.Add(Task.Run(async () =>
             {
                 try {
-                    _logger.LogInformation("Iniciando página: {0}", page.ToString());
-                    var pichauRequest = new PichauRequest(urlFunction(page));
-                    var pichauData = pichauRequest.MakeRequest();
-
-                    if (pichauData is null)
-                    {
-                        _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
-                    }
-
-                    if (pichauData.Data is null)
-                    {
-                        _logger.LogInformation("Falha na requisição da página {0}", i.ToString());
-                    }
 
                     foreach (var product in pichauData.Data?.Products.Items)
                     {
                         var pichauProduct = new PichauProduct(product.Name, product.CodigoBarra,
-                            product.PriceRange.MaximumPrice.FinalPrice.Value);
+                            (double)product.PichauPrices.FinalPrice);
 
                         if (pichauProduct.Barcode is null)
                         {
