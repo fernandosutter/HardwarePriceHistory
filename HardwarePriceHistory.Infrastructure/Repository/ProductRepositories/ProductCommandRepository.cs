@@ -1,9 +1,9 @@
-using HardwarePriceHistory.Data.Database;
-using HardwarePriceHistory.Data.Interfaces;
-using Dapper;   
+using Dapper;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
 
-namespace HardwarePriceHistory.Data.Repository.Product;
+namespace HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 
 public class ProductCommandRepository : IProductCommandRepository
 {

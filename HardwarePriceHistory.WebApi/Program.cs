@@ -1,6 +1,7 @@
-using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Data.Repository.PriceHistory;
-using HardwarePriceHistory.WebAPI.Services;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Core.Services;
+using HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories;
+using HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

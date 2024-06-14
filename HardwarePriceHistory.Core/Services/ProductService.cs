@@ -1,7 +1,7 @@
-﻿using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Models;
+﻿using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Core.Models;
 
-namespace HardwarePriceHistory.WebAPI.Services
+namespace HardwarePriceHistory.Core.Services
 {
     public class ProductService
     {

@@ -1,4 +1,4 @@
-namespace HardwarePriceHistory.Pichau.Addresses;
+namespace HardwarePriceHistory.Core.Addresses;
 
 public class PichauAddresses
 {

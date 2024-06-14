@@ -1,6 +1,6 @@
-using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Data.Repository.PriceHistory;
-using HardwarePriceHistory.Data.Repository.Product;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories;
+using HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 using HardwarePriceHistory.WorkerService;
 using Serilog;
 

@@ -1,5 +1,6 @@
-// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
 using Newtonsoft.Json;
+
+namespace HardwarePriceHistory.Core.Models;
 
 public class Aggregation
 {
@@ -507,4 +508,3 @@ public class ShortDescription
     [JsonProperty("__typename", NullValueHandling = NullValueHandling.Ignore)]
     public string Typename { get; set; }
 }
-

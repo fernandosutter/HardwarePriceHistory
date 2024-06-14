@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\HardwarePriceHistory.Data\HardwarePriceHistory.Data.csproj" />
-      <ProjectReference Include="..\HardwarePriceHistory.Pichau\HardwarePriceHistory.Pichau.csproj" />
+      <ProjectReference Include="..\HardwarePriceHistory.Core\HardwarePriceHistory.Core.csproj" />
+      <ProjectReference Include="..\HardwarePriceHistory.Infrastructure\HardwarePriceHistory.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

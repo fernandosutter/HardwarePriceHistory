@@ -1,14 +1,15 @@
 ﻿using System.Text;
 using Dapper;
-using HardwarePriceHistory.Data.Database;
-using HardwarePriceHistory.Data.Interfaces;
+using HardwarePriceHistory.Infrastructure.Database;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Core.Models;
 using Microsoft.Data.SqlClient;
 
-namespace HardwarePriceHistory.Data.Repository.PriceHistory
+namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories
 {
     public class PriceHistoryQueryRepository : IPriceHistoryQueryRepository
     {
-        public List<Models.PriceHistory> GetPriceHistory(int productId, DateTime? initialDate, DateTime? finalDate)
+        public List<PriceHistory> GetPriceHistory(int productId, DateTime? initialDate, DateTime? finalDate)
         {
             using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
             {
@@ -33,7 +34,7 @@ namespace HardwarePriceHistory.Data.Repository.PriceHistory
 
                 #endregion
 
-                var result = connection.Query<Models.PriceHistory>(sql.ToString(),
+                var result = connection.Query<Core.Models.PriceHistory>(sql.ToString(),
                     new { ProductId = productId, InitialDate = initialDate, FinalDate = finalDate });
 
                 return result.ToList();

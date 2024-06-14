@@ -1,4 +1,4 @@
-namespace HardwarePriceHistory.Data.Interfaces;
+namespace HardwarePriceHistory.Core.Interfaces;
 
 public interface IProductCommandRepository
 {

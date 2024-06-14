@@ -1,9 +1,8 @@
 using System.Globalization;
-using HardwarePriceHistory.Data.Interfaces;
-using System.Threading.Tasks;
-using HardwarePriceHistory.Pichau.Addresses;
-using HardwarePriceHistory.Pichau.Models;
-using HardwarePriceHistory.Pichau.Requests;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Core.Addresses;
+using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Infrastructure.Requests;
 
 namespace HardwarePriceHistory.WorkerService;
 

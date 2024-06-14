@@ -1,8 +1,10 @@
 using Dapper;
-using HardwarePriceHistory.Data.Database;
-using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Models;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
+
+namespace HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 
 public class ProductQueryRepository : IProductQueryRepository
 {

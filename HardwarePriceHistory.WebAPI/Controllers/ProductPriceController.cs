@@ -1,7 +1,5 @@
-﻿using HardwarePriceHistory.Data.Interfaces;
-using HardwarePriceHistory.Models;
-using HardwarePriceHistory.WebAPI.Services;
-using Microsoft.AspNetCore.Http;
+﻿using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HardwarePriceHistory.WebAPI.Controllers

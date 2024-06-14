@@ -1,4 +1,4 @@
-namespace HardwarePriceHistory.Data.Database;
+namespace HardwarePriceHistory.Infrastructure.Database;
 
 public static class DatabaseConnection
 {

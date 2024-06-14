@@ -1,6 +1,6 @@
-using HardwarePriceHistory.Models;
+using HardwarePriceHistory.Core.Models;
 
-namespace HardwarePriceHistory.Data.Interfaces;
+namespace HardwarePriceHistory.Core.Interfaces;
 
 public interface IProductQueryRepository
 {

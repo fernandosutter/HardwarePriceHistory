@@ -1,4 +1,4 @@
-﻿namespace HardwarePriceHistory.Models
+﻿namespace HardwarePriceHistory.Core.Models
 {
     public class Product
     {

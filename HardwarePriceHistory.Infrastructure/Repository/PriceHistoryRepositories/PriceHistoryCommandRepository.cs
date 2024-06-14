@@ -1,9 +1,9 @@
 using Dapper;
-using HardwarePriceHistory.Data.Database;
-using HardwarePriceHistory.Data.Interfaces;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
 
-namespace HardwarePriceHistory.Data.Repository.PriceHistory;
+namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories;
 
 public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
 {
