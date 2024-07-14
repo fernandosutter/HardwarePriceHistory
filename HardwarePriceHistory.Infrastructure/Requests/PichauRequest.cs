@@ -1,4 +1,5 @@
-using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Core.Abstractions;
+using HardwarePriceHistory.Domain.Models;
 using Newtonsoft.Json;
 
 namespace HardwarePriceHistory.Infrastructure.Requests;
@@ -12,13 +13,12 @@ public class PichauRequest
         _address = address;
     }
 
-    public PichauProductData? MakeRequest()
+    public Result<PichauProductData> MakeRequest()
     {
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36");
         client.DefaultRequestHeaders.Add("Sec-Ch-Ua", "Chromium;v=124, Google Chrome;v=124, Not-A.Brand;v=99");
         client.DefaultRequestHeaders.Add("Sec-Ch-Ua-Mobile", "?0");
-        //client.DefaultRequestHeaders.Add("Sec-Ch-Ua-Platform:", "'Windows'");
         client.DefaultRequestHeaders.Add("Sec-Fetch-Dest", "document");
         client.DefaultRequestHeaders.Add("Sec-Fetch-Mode", "navigate");
         client.DefaultRequestHeaders.Add("Sec-Fetch-Site", "none");
@@ -34,12 +34,14 @@ public class PichauRequest
             string data = reader.ReadToEnd();
 
             var products = JsonConvert.DeserializeObject<PichauProductData>(data);
-            return products;
+            
+            return products is null || products.Data is null
+                ? Result<PichauProductData>.Failure("Pichau request failure.")
+                : Result<PichauProductData>.Success(products);
         }
         catch (Exception e)
         {
-            return null;
+            return Result<PichauProductData>.Failure($"Pichau request failure. {e.Message}");
         }
-        
     }
 }

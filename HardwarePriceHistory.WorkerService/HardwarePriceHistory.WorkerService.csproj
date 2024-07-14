@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\HardwarePriceHistory.Core\HardwarePriceHistory.Core.csproj" />
+      <ProjectReference Include="..\HardwarePriceHistory.Domain\HardwarePriceHistory.Domain.csproj" />
       <ProjectReference Include="..\HardwarePriceHistory.Infrastructure\HardwarePriceHistory.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HardwarePriceHistory.Core\HardwarePriceHistory.Core.csproj" />
+    <ProjectReference Include="..\HardwarePriceHistory.Domain\HardwarePriceHistory.Domain.csproj" />
   </ItemGroup>
 
 </Project>

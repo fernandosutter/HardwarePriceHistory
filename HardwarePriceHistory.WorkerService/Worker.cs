@@ -1,7 +1,7 @@
 using System.Globalization;
 using HardwarePriceHistory.Core.Interfaces;
 using HardwarePriceHistory.Core.Addresses;
-using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Domain.Models;
 using HardwarePriceHistory.Infrastructure.Requests;
 
 namespace HardwarePriceHistory.WorkerService;
@@ -62,13 +62,13 @@ public class Worker : BackgroundService
         var pichauInitialRequest = new PichauRequest(urlFunction(initialPage));
         var pichauInitialData = pichauInitialRequest.MakeRequest();
 
-        if (pichauInitialData is null)
+        if (!pichauInitialData.IsSuccess)
         {
             _logger.LogWarning("Não foi possível iniciar as requisições");
             return;
         }
 
-        var finalPage = pichauInitialData.Data.Products.PageInfo.TotalPages;
+        var finalPage = pichauInitialData.Data.Data.Products.PageInfo.TotalPages;
 
         var tasks = new List<Task>();
 
@@ -79,13 +79,7 @@ public class Worker : BackgroundService
             var pichauRequest = new PichauRequest(urlFunction(page));
             var pichauData = pichauRequest.MakeRequest();
 
-            if (pichauData is null)
-            {
-                _logger.LogInformation("Falha na requisição da página {0}", page.ToString());
-                continue;
-            }
-
-            if (pichauData.Data is null)
+            if (!pichauData.IsSuccess)
             {
                 _logger.LogInformation("Falha na requisição da página {0}", page.ToString());
                 continue;
@@ -95,7 +89,7 @@ public class Worker : BackgroundService
             {
                 try {
 
-                    foreach (var product in pichauData.Data?.Products.Items)
+                    foreach (var product in pichauData.Data.Data?.Products.Items)
                     {
                         var pichauProduct = new PichauProduct(product.Name, product.CodigoBarra,
                             (double)product.PichauPrices.FinalPrice);

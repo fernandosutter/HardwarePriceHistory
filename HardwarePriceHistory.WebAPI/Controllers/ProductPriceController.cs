@@ -1,4 +1,4 @@
-﻿using HardwarePriceHistory.Core.Models;
+﻿using HardwarePriceHistory.Domain.Models;
 using HardwarePriceHistory.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 

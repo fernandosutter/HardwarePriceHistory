@@ -1,5 +1,5 @@
 ﻿using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Domain.Models;
 
 namespace HardwarePriceHistory.Core.Services
 {

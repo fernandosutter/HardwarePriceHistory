@@ -1,4 +1,4 @@
-namespace HardwarePriceHistory.Core.Models;
+namespace HardwarePriceHistory.Domain.Models;
 
 public class PichauProduct
 {

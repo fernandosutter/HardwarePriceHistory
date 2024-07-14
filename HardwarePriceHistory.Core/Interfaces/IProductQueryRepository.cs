@@ -1,4 +1,4 @@
-using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Domain.Models;
 
 namespace HardwarePriceHistory.Core.Interfaces;
 

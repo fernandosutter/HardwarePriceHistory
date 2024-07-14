@@ -2,7 +2,7 @@
 using Dapper;
 using HardwarePriceHistory.Infrastructure.Database;
 using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Domain.Models;
 using Microsoft.Data.SqlClient;
 
 namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories
@@ -34,7 +34,7 @@ namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositorie
 
                 #endregion
 
-                var result = connection.Query<Core.Models.PriceHistory>(sql.ToString(),
+                var result = connection.Query<PriceHistory>(sql.ToString(),
                     new { ProductId = productId, InitialDate = initialDate, FinalDate = finalDate });
 
                 return result.ToList();

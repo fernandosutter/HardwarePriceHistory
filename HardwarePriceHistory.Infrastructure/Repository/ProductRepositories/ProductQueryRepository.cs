@@ -1,6 +1,6 @@
 using Dapper;
 using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.Models;
+using HardwarePriceHistory.Domain.Models;
 using HardwarePriceHistory.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
 
