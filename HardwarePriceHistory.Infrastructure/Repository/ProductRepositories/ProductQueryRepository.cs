@@ -1,5 +1,6 @@
 using Dapper;
 using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Core.ViewModel;
 using HardwarePriceHistory.Domain.Models;
 using HardwarePriceHistory.Infrastructure.Database;
 using Microsoft.Data.SqlClient;
@@ -63,7 +64,7 @@ public class ProductQueryRepository : IProductQueryRepository
         }
     }
 
-    public List<Product> GetProductsByName(string name)
+    public List<ProductViewModel> GetProductsByName(string name)
     {
         using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
         {
@@ -71,14 +72,14 @@ public class ProductQueryRepository : IProductQueryRepository
 
             #region SQL
 
-            var sql = @"SELECT id as Id,
-                            product_barcode as ProductBarCode,
-                            name as ProductName
+            var sql = @"SELECT 
+                            product_barcode as Barcode,
+                            name as Name
                         FROM Products WHERE name like  '%' + @name + '%'";
 
             #endregion
 
-            var result = connection.Query<Product>(sql, new { name });
+            var result = connection.Query<ProductViewModel>(sql, new { name });
 
             return result.ToList();
         }

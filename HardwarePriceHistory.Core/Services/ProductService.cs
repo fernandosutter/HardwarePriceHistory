@@ -1,5 +1,5 @@
 ﻿using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Domain.Models;
+using HardwarePriceHistory.Core.ViewModel;
 
 namespace HardwarePriceHistory.Core.Services
 {
@@ -13,7 +13,7 @@ namespace HardwarePriceHistory.Core.Services
             _productQueryRepository = productQueryRepository;
         }
 
-        public List<Product> GetProducts(string name)
+        public List<ProductViewModel> GetProducts(string name)
         {
             var products = _productQueryRepository.GetProductsByName(name);
 

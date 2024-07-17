@@ -20,6 +20,22 @@ builder.Services.AddScoped<PriceHistoryService>();
 
 var app = builder.Build();
 
+app.UseCors(options =>
+{
+    options.AllowAnyOrigin()
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+});
+
+/*
+app.UseCors(options =>
+{
+    options.WithOrigins("https://www.example.com", "https://api.example.com")
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+});
+*/
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

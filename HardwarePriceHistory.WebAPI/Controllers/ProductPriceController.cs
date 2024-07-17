@@ -1,5 +1,6 @@
 ﻿using HardwarePriceHistory.Domain.Models;
 using HardwarePriceHistory.Core.Services;
+using HardwarePriceHistory.Core.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HardwarePriceHistory.WebAPI.Controllers
@@ -17,9 +18,9 @@ namespace HardwarePriceHistory.WebAPI.Controllers
 
 
         [HttpGet]
-        public ActionResult<List<PriceHistory>> GetPriceHistory(int productId, DateTime? initialDate, DateTime? finalDate)
+        public ActionResult<List<PriceHistoryViewModel>> GetPriceHistory(long productBarCode, DateTime? initialDate, DateTime? finalDate)
         {
-            var prices = _priceHistoryService.GetPrices(productId, initialDate, finalDate);
+            var prices = _priceHistoryService.GetPrices(productBarCode, initialDate, finalDate);
 
             if(prices.Count == 0)
                 return NotFound();

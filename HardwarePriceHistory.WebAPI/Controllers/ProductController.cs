@@ -1,5 +1,6 @@
 ﻿using HardwarePriceHistory.Domain.Models;
 using HardwarePriceHistory.Core.Services;
+using HardwarePriceHistory.Core.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HardwarePriceHistory.WebAPI.Controllers
@@ -17,7 +18,7 @@ namespace HardwarePriceHistory.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Product>> GetByName(string name)
+        public ActionResult<List<ProductViewModel>> GetByName(string name)
         {
             var products = _productService.GetProducts(name);
 

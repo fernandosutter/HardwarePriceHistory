@@ -1,5 +1,5 @@
 ﻿using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Domain.Models;
+using HardwarePriceHistory.Core.ViewModel;
 
 namespace HardwarePriceHistory.Core.Services
 {
@@ -12,9 +12,9 @@ namespace HardwarePriceHistory.Core.Services
             _priceHistoryQueryRepository = priceHistoryQueryRepository;
         }
 
-        public List<PriceHistory> GetPrices(int productId, DateTime? initialDateTime, DateTime? finalDateTime){
+        public List<PriceHistoryViewModel> GetPrices(long productBarCode, DateTime? initialDateTime, DateTime? finalDateTime){
 
-            var priceHistoryFromProduct = _priceHistoryQueryRepository.GetPriceHistory(productId, initialDateTime, finalDateTime);
+            var priceHistoryFromProduct = _priceHistoryQueryRepository.GetPriceHistory(productBarCode, initialDateTime, finalDateTime);
 
             return priceHistoryFromProduct;
         }
