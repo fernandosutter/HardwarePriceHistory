@@ -7,9 +7,16 @@ namespace HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 
 public class ProductCommandRepository : IProductCommandRepository
 {
+    private readonly DatabaseConnection _databaseConnection;
+
+    public ProductCommandRepository(DatabaseConnection databaseConnection)
+    {
+        _databaseConnection = databaseConnection;
+    }
+
     public async Task<int> AddProductToDatabase(string barcode, string name, int productType)
     {
-        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+        using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"INSERT INTO Products (product_barcode, name, product_type) VALUES (@barcode, @name, @productType); SELECT SCOPE_IDENTITY()";
@@ -20,7 +27,7 @@ public class ProductCommandRepository : IProductCommandRepository
 
     public bool RemoveProductFromDatabase(string barcode)
     {
-        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+        using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"DELETE FROM Products WHERE product_barcode = @barcode";
@@ -31,7 +38,7 @@ public class ProductCommandRepository : IProductCommandRepository
     
     public bool RemoveProductFromDatabase(int id)
     {
-        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+        using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
         {
             connection.Open();
             var sql = @"DELETE FROM Products WHERE id = @id";

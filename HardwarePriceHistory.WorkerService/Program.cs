@@ -1,4 +1,5 @@
 using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Infrastructure.Database;
 using HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories;
 using HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 using HardwarePriceHistory.WorkerService;
@@ -8,6 +9,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
+        services.AddSingleton<DatabaseConnection>();
         services.AddSingleton<IProductCommandRepository, ProductCommandRepository>();
         services.AddSingleton<IProductQueryRepository, ProductQueryRepository>();
         services.AddSingleton<IPriceHistoryCommandRepository, PriceHistoryCommandRepository>();

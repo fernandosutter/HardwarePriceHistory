@@ -1,7 +1,7 @@
 using System.Globalization;
 using HardwarePriceHistory.Core.Interfaces;
 using HardwarePriceHistory.Core.Addresses;
-using HardwarePriceHistory.Domain.Models;
+using HardwarePriceHistory.Core.Models;
 using HardwarePriceHistory.Infrastructure.Requests;
 
 namespace HardwarePriceHistory.WorkerService;

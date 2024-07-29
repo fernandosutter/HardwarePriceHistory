@@ -1,5 +1,4 @@
-using HardwarePriceHistory.Core.ViewModel;
-using HardwarePriceHistory.Domain.Models;
+using HardwarePriceHistory.Core.Models;
 
 namespace HardwarePriceHistory.Core.Interfaces;
 
@@ -15,5 +14,5 @@ public interface IProductQueryRepository
 
     Task<int> GetProductIdWithBarcodeAndName(string barcode, string productName);
 
-    List<ProductViewModel> GetProductsByName(string name);
+    List<Product> GetProductsByName(string name);
 }

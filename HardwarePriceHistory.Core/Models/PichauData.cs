@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace HardwarePriceHistory.Domain.Models;
+namespace HardwarePriceHistory.Core.Models;
 
 public class Aggregation
 {

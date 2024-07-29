@@ -1,7 +1,7 @@
-﻿using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.ViewModel;
+﻿using HardwarePriceHistory.Application.ViewModel;
+using HardwarePriceHistory.Core.Interfaces;
 
-namespace HardwarePriceHistory.Core.Services
+namespace HardwarePriceHistory.Application.Services
 {
     public class PriceHistoryService
     {
@@ -16,7 +16,9 @@ namespace HardwarePriceHistory.Core.Services
 
             var priceHistoryFromProduct = _priceHistoryQueryRepository.GetPriceHistory(productBarCode, initialDateTime, finalDateTime);
 
-            return priceHistoryFromProduct;
+            var result = priceHistoryFromProduct.Select(PriceHistoryViewModel.ToViewModel).ToList();
+
+            return result;
         }
     }
 }

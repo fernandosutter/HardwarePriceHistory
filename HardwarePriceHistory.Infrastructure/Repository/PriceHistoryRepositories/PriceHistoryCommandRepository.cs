@@ -7,9 +7,16 @@ namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositorie
 
 public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
 {
+    private readonly DatabaseConnection _databaseConnection;
+
+    public PriceHistoryCommandRepository(DatabaseConnection databaseConnection)
+    {
+        _databaseConnection = databaseConnection;
+    }
+
     public async Task<bool> AddPriceHistory(int productId, double productPrice, DateTime datetime)
     {
-        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+        using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
         {
             connection.Open();
             string sql = @"INSERT INTO ProductPriceHistory (product_id, price, datetime) VALUES (@ProductId, @Price, @Date)";
@@ -20,7 +27,7 @@ public class PriceHistoryCommandRepository : IPriceHistoryCommandRepository
 
     public bool DeletePriceHistory(int id)
     {
-        using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+        using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
         {
             connection.Open();
             string sql = @"DELETE FROM ProductPriceHistory WHERE id = @Id";

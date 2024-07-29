@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwarePriceHistory.Core",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HardwarePriceHistory.Infrastructure", "HardwarePriceHistory.Infrastructure\HardwarePriceHistory.Infrastructure.csproj", "{33557B59-2EC5-4123-B6F7-3ED7F5E68060}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.Domain", "HardwarePriceHistory.Domain\HardwarePriceHistory.Domain.csproj", "{2978DB24-D75F-4735-9CEF-BA090FE68148}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HardwarePriceHistory.Application", "HardwarePriceHistory.Application\HardwarePriceHistory.Application.csproj", "{7D3BF373-A7AD-40A2-AE83-244B59E10166}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{33557B59-2EC5-4123-B6F7-3ED7F5E68060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33557B59-2EC5-4123-B6F7-3ED7F5E68060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33557B59-2EC5-4123-B6F7-3ED7F5E68060}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2978DB24-D75F-4735-9CEF-BA090FE68148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2978DB24-D75F-4735-9CEF-BA090FE68148}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2978DB24-D75F-4735-9CEF-BA090FE68148}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2978DB24-D75F-4735-9CEF-BA090FE68148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D3BF373-A7AD-40A2-AE83-244B59E10166}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D3BF373-A7AD-40A2-AE83-244B59E10166}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D3BF373-A7AD-40A2-AE83-244B59E10166}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D3BF373-A7AD-40A2-AE83-244B59E10166}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

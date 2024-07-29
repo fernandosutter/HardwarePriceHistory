@@ -1,5 +1,5 @@
 using HardwarePriceHistory.Core.Abstractions;
-using HardwarePriceHistory.Domain.Models;
+using HardwarePriceHistory.Core.Models;
 using Newtonsoft.Json;
 
 namespace HardwarePriceHistory.Infrastructure.Requests;

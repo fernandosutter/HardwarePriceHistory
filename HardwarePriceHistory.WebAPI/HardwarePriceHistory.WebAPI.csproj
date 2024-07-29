@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HardwarePriceHistory.Core\HardwarePriceHistory.Core.csproj" />
+    <ProjectReference Include="..\HardwarePriceHistory.Application\HardwarePriceHistory.Application.csproj" />
     <ProjectReference Include="..\HardwarePriceHistory.Infrastructure\HardwarePriceHistory.Infrastructure.csproj" />
   </ItemGroup>
 

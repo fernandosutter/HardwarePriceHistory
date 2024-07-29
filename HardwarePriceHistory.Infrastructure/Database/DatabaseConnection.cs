@@ -1,17 +1,18 @@
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+
 namespace HardwarePriceHistory.Infrastructure.Database;
 
-public static class DatabaseConnection
+public class DatabaseConnection
 {
-    public static string ConnectionString
+    private readonly IConfiguration _configuration;
+    private readonly string _connectionString;
+
+    public DatabaseConnection(IConfiguration configuration)
     {
-        //Tratar variavel de ambiente para substituir o valor da string de conexão
-        get
-        {
-#if DEBUG
-            return "Server=localhost,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
-#else
-            return "Server=localhost,1433;Database=HardwarePriceHistory;User ID=sa;Password=SQLSUTTER@123;TrustServerCertificate=True;";
-#endif
-        }
+        _configuration = configuration;
+        _connectionString = _configuration.GetConnectionString("DB_CONNECTION_STRING");
     }
+    public string ConnectionString => _connectionString;
 }

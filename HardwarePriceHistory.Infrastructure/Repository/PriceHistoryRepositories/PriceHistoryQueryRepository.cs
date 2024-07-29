@@ -2,17 +2,22 @@
 using Dapper;
 using HardwarePriceHistory.Infrastructure.Database;
 using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.ViewModel;
-using HardwarePriceHistory.Domain.Models;
+using HardwarePriceHistory.Core.Models;
 using Microsoft.Data.SqlClient;
 
 namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories
 {
     public class PriceHistoryQueryRepository : IPriceHistoryQueryRepository
     {
-        public List<PriceHistoryViewModel> GetPriceHistory(long productBarCode, DateTime? initialDate, DateTime? finalDate)
+        private readonly DatabaseConnection _databaseConnection;
+        public PriceHistoryQueryRepository(DatabaseConnection databaseConnection)
         {
-            using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+            _databaseConnection = databaseConnection;
+        }
+
+        public List<PriceHistory> GetPriceHistory(long productBarCode, DateTime? initialDate, DateTime? finalDate)
+        {
+            using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
             {
                 connection.Open();
 
@@ -35,7 +40,7 @@ namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositorie
 
                 #endregion
 
-                var result = connection.Query<PriceHistoryViewModel>(sql.ToString(),
+                var result = connection.Query<PriceHistory>(sql.ToString(),
                     new { ProductBarcode = productBarCode, InitialDate = initialDate, FinalDate = finalDate });
 
                 return result.ToList();
@@ -44,7 +49,7 @@ namespace HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositorie
         
         public async Task<bool> CheckIfLastPriceAlreadyExistsToDate(int productId, double price, DateTime dateTime)
         {
-            using (var connection = new SqlConnection(DatabaseConnection.ConnectionString))
+            using (var connection = new SqlConnection(_databaseConnection.ConnectionString))
             {
                 connection.Open();
 

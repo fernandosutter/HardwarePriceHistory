@@ -1,7 +1,7 @@
-﻿using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.ViewModel;
+﻿using HardwarePriceHistory.Application.ViewModel;
+using HardwarePriceHistory.Core.Interfaces;
 
-namespace HardwarePriceHistory.Core.Services
+namespace HardwarePriceHistory.Application.Services
 {
     public class ProductService
     {
@@ -17,7 +17,9 @@ namespace HardwarePriceHistory.Core.Services
         {
             var products = _productQueryRepository.GetProductsByName(name);
 
-            return products;
+            var result = products.Select(ProductViewModel.ToViewModel).ToList();
+
+            return result;
         }
     }
 }

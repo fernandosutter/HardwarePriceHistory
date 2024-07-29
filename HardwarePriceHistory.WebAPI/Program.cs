@@ -1,5 +1,6 @@
-﻿using HardwarePriceHistory.Core.Interfaces;
-using HardwarePriceHistory.Core.Services;
+﻿using HardwarePriceHistory.Application.Services;
+using HardwarePriceHistory.Core.Interfaces;
+using HardwarePriceHistory.Infrastructure.Database;
 using HardwarePriceHistory.Infrastructure.Repository.PriceHistoryRepositories;
 using HardwarePriceHistory.Infrastructure.Repository.ProductRepositories;
 
@@ -13,6 +14,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //DI
+builder.Services.AddSingleton<DatabaseConnection>();
 builder.Services.AddSingleton<IPriceHistoryQueryRepository, PriceHistoryQueryRepository>();
 builder.Services.AddSingleton<IProductQueryRepository, ProductQueryRepository>();
 builder.Services.AddScoped<ProductService>();
@@ -50,3 +52,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
